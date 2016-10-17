@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.NewGoodsBean;
+import com.example.winston.myapplication.utils.ImageLoader;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class GoodsAdapter extends Adapter {
         }else{
             GoodsViewHolder vh = (GoodsViewHolder) holder;
             NewGoodsBean goods = mList.get(position);
+            ImageLoader.downloadImg(mContext,vh.mIvGoodsThumb,goods.getGoodsThumb());
             //set image
             vh.mTvGoodsName.setText(goods.getGoodsName());
             vh.mTvGoodsPrice.setText(goods.getCurrencyPrice());
