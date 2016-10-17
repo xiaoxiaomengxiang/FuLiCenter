@@ -3,8 +3,8 @@ package com.example.winston.myapplication.utils;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.example.winston.fulicenter.R;
-import com.example.winston.fulicenter.activity.MainActivity;
+import com.example.winston.myapplication.R;
+import com.example.winston.myapplication.activity.MainActivity;
 
 /**
  * Created by Winston on 2016/10/14.
