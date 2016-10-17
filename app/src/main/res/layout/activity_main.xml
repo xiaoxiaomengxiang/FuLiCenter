@@ -80,8 +80,6 @@
                 android:textColor="@color/main_botton_text_color"
                 android:button="@null"
                 android:checked="false"/>
-
-
     </LinearLayout>
     <View
         android:id="@+id/vline"
@@ -89,7 +87,6 @@
         android:layout_height="1px"
         android:layout_above="@id/main_bottom"
         android:background="#D6DCDC"  />
-
     <RelativeLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
