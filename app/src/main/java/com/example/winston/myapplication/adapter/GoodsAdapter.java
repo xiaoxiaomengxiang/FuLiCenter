@@ -14,6 +14,7 @@ import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.NewGoodsBean;
 import com.example.winston.myapplication.utils.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,7 +30,8 @@ public class GoodsAdapter extends Adapter {
 
     public GoodsAdapter(Context context, List<NewGoodsBean> list) {
         mContext = context;
-        mList = list;
+        mList = new ArrayList<>();
+        mList.addAll(list);
     }
 
     @Override
@@ -51,7 +53,6 @@ public class GoodsAdapter extends Adapter {
             GoodsViewHolder vh = (GoodsViewHolder) holder;
             NewGoodsBean goods = mList.get(position);
             ImageLoader.downloadImg(mContext,vh.mIvGoodsThumb,goods.getGoodsThumb());
-            //set image
             vh.mTvGoodsName.setText(goods.getGoodsName());
             vh.mTvGoodsPrice.setText(goods.getCurrencyPrice());
         }
@@ -70,7 +71,15 @@ public class GoodsAdapter extends Adapter {
         return I.TYPE_ITEM;
     }
 
-    static class GoodsViewHolder extends ViewHolder {
+    public void initData(ArrayList<NewGoodsBean> list) {
+        if(mList!=null){
+            mList.clear();
+        }
+        mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    static class GoodsViewHolder extends ViewHolder{
         @BindView(R.id.ivGoodsThumb)
         ImageView mIvGoodsThumb;
         @BindView(R.id.tvGoodsName)
@@ -86,7 +95,7 @@ public class GoodsAdapter extends Adapter {
         }
     }
 
-    static class FooterViewHolder extends ViewHolder {
+    static class FooterViewHolder extends ViewHolder{
         @BindView(R.id.tvFooter)
         TextView mTvFooter;
 
