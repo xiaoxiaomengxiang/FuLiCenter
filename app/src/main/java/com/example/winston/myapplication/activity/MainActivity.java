@@ -1,7 +1,9 @@
-package com.example.winston.myapplication;
+package com.example.winston.myapplication.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.winston.myapplication.R;
 
 public class MainActivity extends AppCompatActivity {
 
