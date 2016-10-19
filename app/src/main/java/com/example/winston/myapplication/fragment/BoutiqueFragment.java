@@ -50,6 +50,7 @@ public class BoutiqueFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_newgoods, container, false);
         ButterKnife.bind(this, layout);
         mContext = (MainActivity) getContext();
+        mList = new ArrayList<>();
         mAdapter = new BoutiqueAdapter(mContext,mList);
         initView();
         initData();
