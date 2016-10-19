@@ -15,6 +15,7 @@ import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.BoutiqueBean;
 import com.example.winston.myapplication.utils.ImageLoader;
+import com.example.winston.myapplication.view.FooterViewHolder;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class BoutiqueAdapter extends Adapter {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder holder = null;
         if (viewType == I.TYPE_FOOTER) {
-            holder = new GoodsAdapter.FooterViewHolder(LayoutInflater.from(mContext)
+            holder = new FooterViewHolder(LayoutInflater.from(mContext)
                     .inflate(R.layout.item_footer, parent, false));
         } else {
             holder = new BoutiqueViewHolder(LayoutInflater.from(mContext)
@@ -60,8 +61,8 @@ public class BoutiqueAdapter extends Adapter {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if(holder instanceof GoodsAdapter.FooterViewHolder){
-            ((GoodsAdapter.FooterViewHolder) holder).mTvFooter.setText(getFooterString());
+        if(holder instanceof FooterViewHolder){
+            ((FooterViewHolder) holder).mTvFooter.setText(getFooterString());
         }
         if(holder instanceof BoutiqueViewHolder){
             BoutiqueBean boutiqueBean = mList.get(position);
@@ -106,5 +107,4 @@ public class BoutiqueAdapter extends Adapter {
             ButterKnife.bind(this, view);
         }
     }
-
 }

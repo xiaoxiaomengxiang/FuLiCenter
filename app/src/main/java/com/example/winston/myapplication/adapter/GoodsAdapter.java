@@ -14,6 +14,7 @@ import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.NewGoodsBean;
 import com.example.winston.myapplication.utils.ImageLoader;
 import com.example.winston.myapplication.utils.MFGT;
+import com.example.winston.myapplication.view.FooterViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,13 +124,4 @@ public class GoodsAdapter extends Adapter {
         }
     }
 
-    static class FooterViewHolder extends ViewHolder{
-        @BindView(R.id.tvFooter)
-        TextView mTvFooter;
-
-        FooterViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
 }
