@@ -1,7 +1,6 @@
 package com.example.winston.myapplication.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
@@ -12,9 +11,9 @@ import android.widget.TextView;
 
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
-import com.example.winston.myapplication.activity.GoodsDetailActivity;
 import com.example.winston.myapplication.bean.NewGoodsBean;
 import com.example.winston.myapplication.utils.ImageLoader;
+import com.example.winston.myapplication.utils.MFGT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,8 +119,7 @@ public class GoodsAdapter extends Adapter {
         @OnClick(R.id.layout_goods)
         public void onGoodsItemClick(){
             int goodsId = (int) mLayoutGoods.getTag();
-            mContext.startActivity(new Intent(mContext, GoodsDetailActivity.class)
-                    .putExtra(I.GoodsDetails.KEY_GOODS_ID,goodsId));
+            MFGT.gotoGoodsDetailsActivity(mContext,goodsId);
         }
     }
 
