@@ -3,6 +3,7 @@ package com.example.winston.myapplication.net;
 import android.content.Context;
 
 import com.example.winston.myapplication.I;
+import com.example.winston.myapplication.bean.BoutiqueBean;
 import com.example.winston.myapplication.bean.GoodsDetailsBean;
 import com.example.winston.myapplication.bean.NewGoodsBean;
 
@@ -25,6 +26,13 @@ public class NetDao {
         utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
                 .addParam(I.GoodsDetails.KEY_GOODS_ID,String.valueOf(goodsId))
                 .targetClass(GoodsDetailsBean.class)
+                .execute(listener);
+    }
+
+    public static void downloadBuotique(Context context, OkHttpUtils.OnCompleteListener<BoutiqueBean[]> listener){
+        OkHttpUtils utils = new OkHttpUtils(context);
+        utils.setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
+                .targetClass(BoutiqueBean[].class)
                 .execute(listener);
     }
 }
