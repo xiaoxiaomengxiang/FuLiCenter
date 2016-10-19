@@ -6,8 +6,10 @@ import android.content.Intent;
 
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
+import com.example.winston.myapplication.activity.BoutiqueChildActivity;
 import com.example.winston.myapplication.activity.GoodsDetailActivity;
 import com.example.winston.myapplication.activity.MainActivity;
+import com.example.winston.myapplication.bean.BoutiqueBean;
 
 /**
  * Created by Winston on 2016/10/14.
@@ -34,9 +36,17 @@ public class MFGT {
         startActivity(context,intent);
     }
 
-    public static void startActivity(Context context, Intent intent){
+    public static void startActivity(Context context,Intent intent){
         context.startActivity(intent);
         ((Activity)context).overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
+    }
+
+
+    public static void gotoBoutiqueChildActivity(Context context, BoutiqueBean bean){
+        Intent intent = new Intent();
+        intent.setClass(context, BoutiqueChildActivity.class);
+        intent.putExtra(I.Boutique.CAT_ID,bean);
+        startActivity(context,intent);
     }
 
 }

@@ -1,37 +1,39 @@
-package com.example.winston.myapplication.fragment;
+package com.example.winston.myapplication.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
-import com.example.winston.myapplication.activity.MainActivity;
 import com.example.winston.myapplication.adapter.GoodsAdapter;
+import com.example.winston.myapplication.bean.BoutiqueBean;
 import com.example.winston.myapplication.bean.NewGoodsBean;
 import com.example.winston.myapplication.net.NetDao;
 import com.example.winston.myapplication.net.OkHttpUtils;
 import com.example.winston.myapplication.utils.CommonUtils;
 import com.example.winston.myapplication.utils.ConvertUtils;
 import com.example.winston.myapplication.utils.L;
+import com.example.winston.myapplication.utils.MFGT;
 import com.example.winston.myapplication.view.SpaceItemDecoration;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
- * Created by Winston on 2016/10/17.
+ * Created by Winston on 2016/10/19.
  */
 
-public class NewGoodsFragment extends BaseFragment {
+public class BoutiqueChildActivity extends BaseActivity {
+
+    @BindView(R.id.tv_common_title)
+    TextView mTvCommonTitle;
     @BindView(R.id.tv_refresh)
     TextView mTvRefresh;
     @BindView(R.id.rv)
@@ -39,25 +41,43 @@ public class NewGoodsFragment extends BaseFragment {
     @BindView(R.id.srl)
     SwipeRefreshLayout mSrl;
 
-    MainActivity mContext;
+    BoutiqueChildActivity mContext;
     GoodsAdapter mAdapter;
     ArrayList<NewGoodsBean> mList;
     int pageId = 1;
     GridLayoutManager glm;
+    BoutiqueBean boutique;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        L.e("NewGoodsFragment.onCreateView");
-        View layout = inflater.inflate(R.layout.fragment_newgoods, container, false);
-        ButterKnife.bind(this, layout);
-        mContext = (MainActivity) getContext();
+    protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_boutique_child);
+        ButterKnife.bind(this);
+        boutique = (BoutiqueBean) getIntent().getSerializableExtra(I.Boutique.CAT_ID);
+        if(boutique == null){
+            finish();
+        }
+        mContext = this;
         mList = new ArrayList<>();
         mAdapter = new GoodsAdapter(mContext,mList);
-        super.onCreateView(inflater,container,savedInstanceState);
-        return layout;
+        super.onCreate(savedInstanceState);
     }
+
+    @Override
+    protected void initView() {
+        mSrl.setColorSchemeColors(
+                getResources().getColor(R.color.google_blue),
+                getResources().getColor(R.color.google_green),
+                getResources().getColor(R.color.google_red),
+                getResources().getColor(R.color.google_yellow)
+        );
+        glm = new GridLayoutManager(mContext, I.COLUM_NUM);
+        mRv.setLayoutManager(glm);
+        mRv.setHasFixedSize(true);
+        mRv.setAdapter(mAdapter);
+        mRv.addItemDecoration(new SpaceItemDecoration(12));
+        mTvCommonTitle.setText(boutique.getTitle());
+    }
+
 
     @Override
     protected void setListener() {
@@ -78,7 +98,7 @@ public class NewGoodsFragment extends BaseFragment {
     }
 
     private void downloadNewGoods(final int action) {
-        NetDao.downloadNewGoods(mContext,I.CAT_ID, pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
+        NetDao.downloadNewGoods(mContext,boutique.getId(), pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 mSrl.setRefreshing(false);
@@ -139,18 +159,8 @@ public class NewGoodsFragment extends BaseFragment {
         downloadNewGoods(I.ACTION_DOWNLOAD);
     }
 
-    @Override
-    protected void initView() {
-        mSrl.setColorSchemeColors(
-                getResources().getColor(R.color.google_blue),
-                getResources().getColor(R.color.google_green),
-                getResources().getColor(R.color.google_red),
-                getResources().getColor(R.color.google_yellow)
-        );
-        glm = new GridLayoutManager(mContext, I.COLUM_NUM);
-        mRv.setLayoutManager(glm);
-        mRv.setHasFixedSize(true);
-        mRv.setAdapter(mAdapter);
-        mRv.addItemDecoration(new SpaceItemDecoration(12));
+    @OnClick(R.id.backClickArea)
+    public void onClick() {
+        MFGT.finish(this);
     }
 }
