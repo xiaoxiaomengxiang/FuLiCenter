@@ -8,16 +8,19 @@ import android.widget.TextView;
 
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
+import com.example.winston.myapplication.bean.AlbumsBean;
 import com.example.winston.myapplication.bean.GoodsDetailsBean;
 import com.example.winston.myapplication.net.NetDao;
 import com.example.winston.myapplication.net.OkHttpUtils;
 import com.example.winston.myapplication.utils.CommonUtils;
 import com.example.winston.myapplication.utils.L;
+import com.example.winston.myapplication.utils.MFGT;
 import com.example.winston.myapplication.view.FlowIndicator;
 import com.example.winston.myapplication.view.SlideAutoLoopView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Winston on 2016/10/19.
@@ -91,10 +94,36 @@ public class GoodsDetailActivity extends AppCompatActivity {
         mTvGoodName.setText(details.getGoodsName());
         mTvGoodPriceCurrent.setText(details.getCurrencyPrice());
         mTvGoodPriceShop.setText(details.getShopPrice());
+        mSalv.startPlayLoop(mIndicator,getAlbumImgUrl(details),getAlbumImgCount(details));
+        mWvGoodBrief.loadDataWithBaseURL(null,details.getGoodsBrief(),I.TEXT_HTML,I.UTF_8,null);
+    }
 
+    private int getAlbumImgCount(GoodsDetailsBean details) {
+        if(details.getProperties()!=null && details.getProperties().length>0) {
+            return details.getProperties()[0].getAlbums().length;
+        }
+        return 0;
+    }
+
+    private String[] getAlbumImgUrl(GoodsDetailsBean details) {
+        String[] urls = new String[]{};
+        if(details.getProperties()!=null && details.getProperties().length>0){
+            AlbumsBean[] albums = details.getProperties()[0].getAlbums();
+            urls = new String[albums.length];
+            for(int i=0;i<albums.length;i++){
+                urls[i] = albums[i].getImgUrl();
+            }
+        }
+        return urls;
     }
 
     private void initView() {
 
     }
+
+    @OnClick(R.id.backClickArea)
+    public void onBackClick(){
+        MFGT.finish(this);
+    }
+
 }
