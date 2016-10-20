@@ -7,9 +7,13 @@ import android.content.Intent;
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.activity.BoutiqueChildActivity;
+import com.example.winston.myapplication.activity.CategoryChildActivity;
 import com.example.winston.myapplication.activity.GoodsDetailActivity;
 import com.example.winston.myapplication.activity.MainActivity;
 import com.example.winston.myapplication.bean.BoutiqueBean;
+import com.example.winston.myapplication.bean.CategoryChildBean;
+
+import java.util.ArrayList;
 
 /**
  * Created by Winston on 2016/10/14.
@@ -48,6 +52,15 @@ public class MFGT {
         intent.putExtra(I.Boutique.CAT_ID,bean);
         startActivity(context,intent);
     }
+    public static void gotoCategoryChildActivity(Context context, int catId, String groupName, ArrayList<CategoryChildBean> list){
+        Intent intent = new Intent();
+        intent.setClass(context, CategoryChildActivity.class);
+        intent.putExtra(I.CategoryChild.CAT_ID,catId);
+        intent.putExtra(I.CategoryGroup.NAME,groupName);
+        intent.putExtra(I.CategoryChild.ID, list);
+        startActivity(context,intent);
+    }
+
 
 }
 

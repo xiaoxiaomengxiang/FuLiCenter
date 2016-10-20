@@ -112,6 +112,7 @@ public class NewGoodsFragment extends BaseFragment {
     }
 
     private void setPullUpListener() {
+        mRv.setLayoutManager(glm);
         mRv.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -148,7 +149,6 @@ public class NewGoodsFragment extends BaseFragment {
                 getResources().getColor(R.color.google_yellow)
         );
         glm = new GridLayoutManager(mContext, I.COLUM_NUM);
-        mRv.setLayoutManager(glm);
         mRv.setHasFixedSize(true);
         mRv.setAdapter(mAdapter);
         mRv.addItemDecoration(new SpaceItemDecoration(12));

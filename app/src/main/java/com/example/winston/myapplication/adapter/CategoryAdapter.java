@@ -12,11 +12,13 @@ import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.CategoryChildBean;
 import com.example.winston.myapplication.bean.CategoryGroupBean;
 import com.example.winston.myapplication.utils.ImageLoader;
+import com.example.winston.myapplication.utils.MFGT;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 /**
  * Created by Winston on 2016/10/20.
@@ -94,7 +96,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup parent) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup parent) {
         ChildViewHolder holder;
         if (view == null) {
             view = View.inflate(mContext, R.layout.item_category_child, null);
@@ -103,10 +105,18 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (ChildViewHolder) view.getTag();
         }
-        CategoryChildBean child = getChild(groupPosition, childPosition);
+        final CategoryChildBean child = getChild(groupPosition, childPosition);
         if (child != null) {
             ImageLoader.downloadImg(mContext, holder.mivCategoryChildThumb, child.getImageUrl());
             holder.mtvCategoryChildName.setText(child.getName());
+            holder.mlayoutCategoryChild.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ArrayList<CategoryChildBean> list = mChildList.get(groupPosition);
+                    String groupName = mGroupList.get(groupPosition).getName();
+                    MFGT.gotoCategoryChildActivity(mContext,child.getId(),groupName,list);
+                }
+            });
         }
         return view;
     }
