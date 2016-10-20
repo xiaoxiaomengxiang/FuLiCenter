@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.fragment.BoutiqueFragment;
+import com.example.winston.myapplication.fragment.CategoryFragment;
 import com.example.winston.myapplication.fragment.NewGoodsFragment;
 import com.example.winston.myapplication.utils.L;
 
@@ -36,6 +37,7 @@ public class MainActivity extends BaseActivity {
     Fragment[] mFragments;
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mcategoryFragment;
 
 
     @Override
@@ -56,7 +58,9 @@ public class MainActivity extends BaseActivity {
                 .beginTransaction()
                 .add(R.id.fragment_container,mNewGoodsFragment)
                 .add(R.id.fragment_container,mBoutiqueFragment)
+                .add(R.id.fragment_container,mcategoryFragment)
                 .hide(mBoutiqueFragment)
+                .hide(mcategoryFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }
