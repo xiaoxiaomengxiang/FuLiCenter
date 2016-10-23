@@ -1,16 +1,26 @@
 package com.example.winston.myapplication.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.winston.myapplication.R;
+import com.example.winston.myapplication.bean.Result;
+import com.example.winston.myapplication.net.NetDao;
+import com.example.winston.myapplication.net.OkHttpUtils;
+import com.example.winston.myapplication.utils.CommonUtils;
+import com.example.winston.myapplication.utils.L;
+import com.example.winston.myapplication.utils.MFGT;
 import com.example.winston.myapplication.view.DisplayUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class RegisterActivity extends BaseActivity {
+    private static final String TAG = RegisterActivity.class.getSimpleName();
 
     @BindView(R.id.username)
     EditText mUsername;
@@ -23,16 +33,23 @@ public class RegisterActivity extends BaseActivity {
     @BindView(R.id.btn_register)
     Button mBtnRegister;
 
+
+    String username;
+    String nickname;
+    String password;
+    RegisterActivity mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        mContext = this;
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void initView() {
-        DisplayUtils.initBackWithTitle(this,"账户注册");
+        DisplayUtils.initBackWithTitle(this, "账户注册");
     }
 
     @Override
@@ -43,5 +60,69 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void setListener() {
 
+    }
+
+    @OnClick(R.id.btn_register)
+    public void checkedInput() {
+        username = mUsername.getText().toString().trim();
+        nickname = mNick.getText().toString().trim();
+        password = mPassword.getText().toString().trim();
+        String confirmPwd = mConfirmPassword.getText().toString().trim();
+        if(TextUtils.isEmpty(username)){
+            CommonUtils.showShortToast(R.string.user_name_connot_be_empty);
+            mUsername.requestFocus();
+            return;
+        }else if(!username.matches("[a-zA-Z]\\w{5,15}")){
+            CommonUtils.showShortToast(R.string.illegal_user_name);
+            mUsername.requestFocus();
+            return;
+        }else if(TextUtils.isEmpty(nickname)){
+            CommonUtils.showShortToast(R.string.nick_name_connot_be_empty);
+            mNick.requestFocus();
+            return;
+        }else if(TextUtils.isEmpty(password)){
+            CommonUtils.showShortToast(R.string.password_connot_be_empty);
+            mPassword.requestFocus();
+            return;
+        }else if(TextUtils.isEmpty(confirmPwd)){
+            CommonUtils.showShortToast(R.string.confirm_password_connot_be_empty);
+            mConfirmPassword.requestFocus();
+            return;
+        }else if(!password.equals(confirmPwd)){
+            CommonUtils.showShortToast(R.string.two_input_password);
+            mConfirmPassword.requestFocus();
+            return;
+        }
+        register();
+    }
+
+    private void register() {
+        final ProgressDialog pd = new ProgressDialog(mContext);
+        pd.setMessage(getResources().getString(R.string.registering));
+        pd.show();
+        NetDao.register(mContext, username, nickname, password, new OkHttpUtils.OnCompleteListener<Result>() {
+            @Override
+            public void onSuccess(Result result) {
+                pd.dismiss();
+                if(result==null){
+                    CommonUtils.showShortToast(R.string.register_fail);
+                }else{
+                    if(result.isRetMsg()){
+                        CommonUtils.showLongToast(R.string.register_success);
+                        MFGT.finish(mContext);
+                    }else{
+                        CommonUtils.showLongToast(R.string.register_fail_exists);
+                        mUsername.requestFocus();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                pd.dismiss();
+                CommonUtils.showShortToast(error);
+                L.e(TAG,"register error="+error);
+            }
+        });
     }
 }
