@@ -5,13 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.CategoryChildBean;
 import com.example.winston.myapplication.bean.CategoryGroupBean;
 import com.example.winston.myapplication.utils.ImageLoader;
+import com.example.winston.myapplication.utils.L;
 import com.example.winston.myapplication.utils.MFGT;
 
 import java.util.ArrayList;
@@ -83,7 +84,6 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             holder = new GroupViewHolder(view);
             view.setTag(holder);
         } else {
-            view.getTag();
             holder = (GroupViewHolder) view.getTag();
         }
         CategoryGroupBean group = getGroup(groupPosition);
@@ -126,15 +126,17 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-    public void initData(ArrayList<CategoryGroupBean> mGroupList, ArrayList<ArrayList<CategoryChildBean>> mChildList) {
+    public void initData(ArrayList<CategoryGroupBean> groupList, ArrayList<ArrayList<CategoryChildBean>> childList) {
         if (mGroupList != null) {
             mGroupList.clear();
         }
-        mGroupList.addAll(mGroupList);
+            mGroupList.addAll(groupList);
         if (mChildList != null) {
-            mChildList.addAll(mChildList);
-            notifyDataSetChanged();
+            mChildList.clear();
         }
+            mChildList.addAll(childList);
+        L.e("ssssssssssss"+mChildList.size()+"   "+ mGroupList.size());
+            notifyDataSetChanged();
     }
 
     class GroupViewHolder {
@@ -156,7 +158,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         @BindView(R.id.tv_category_child_name)
         TextView mtvCategoryChildName;
         @BindView(R.id.layout_category_child)
-        LinearLayout mlayoutCategoryChild;
+        RelativeLayout mlayoutCategoryChild;
 
         ChildViewHolder(View view) {
             ButterKnife.bind(this, view);

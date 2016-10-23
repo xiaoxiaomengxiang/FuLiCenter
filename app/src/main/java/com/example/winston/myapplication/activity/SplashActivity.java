@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.winston.fulicenter.R;
-import com.example.winston.fulicenter.utils.MFGT;
+import com.example.winston.myapplication.R;
+import com.example.winston.myapplication.utils.MFGT;
 
 public class SplashActivity extends AppCompatActivity {
     private static final long sleepTime=2000;

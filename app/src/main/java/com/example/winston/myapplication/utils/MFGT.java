@@ -9,6 +9,7 @@ import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.activity.BoutiqueChildActivity;
 import com.example.winston.myapplication.activity.CategoryChildActivity;
 import com.example.winston.myapplication.activity.GoodsDetailActivity;
+import com.example.winston.myapplication.activity.LoginActivity;
 import com.example.winston.myapplication.activity.MainActivity;
 import com.example.winston.myapplication.bean.BoutiqueBean;
 import com.example.winston.myapplication.bean.CategoryChildBean;
@@ -61,6 +62,8 @@ public class MFGT {
         startActivity(context,intent);
     }
 
-
+    public static void gotoLogin(Activity context) {
+        startActivity(context, LoginActivity.class);
+    }
 }
 

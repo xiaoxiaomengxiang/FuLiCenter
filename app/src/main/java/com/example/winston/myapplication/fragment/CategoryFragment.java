@@ -81,7 +81,7 @@ public class CategoryFragment extends BaseFragment {
             @Override
             public void onError(String error) {
                 L.e("error="+error);
-            }
+            } ;
         });
     }
 
@@ -95,15 +95,19 @@ public class CategoryFragment extends BaseFragment {
                     ArrayList<CategoryChildBean> childList = ConvertUtils.array2List(result);
                     L.e("childList=" + childList.size());
                     mChildList.add(index,childList);
+                    L.e("mChildList=" + mChildList.size());
+
                 }
                 if (groupCount == mGroupList.size()) {
+                    L.e("SSSSSS");
                     mAdapter.initData(mGroupList, mChildList);
+
                 }
             }
 
             @Override
             public void onError(String error) {
-
+                L.e("error="+error);
             }
         });
     }
@@ -112,4 +116,7 @@ public class CategoryFragment extends BaseFragment {
     protected void setListener() {
 
     }
+
+
+
 }
