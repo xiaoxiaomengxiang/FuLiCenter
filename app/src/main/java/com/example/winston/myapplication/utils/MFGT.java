@@ -17,10 +17,6 @@ import com.example.winston.myapplication.bean.CategoryChildBean;
 
 import java.util.ArrayList;
 
-/**
- * Created by Winston on 2016/10/14.
- * 辅助跳转
- */
 public class MFGT {
     public static void finish(Activity activity){
         activity.finish();
@@ -54,17 +50,21 @@ public class MFGT {
         intent.putExtra(I.Boutique.CAT_ID,bean);
         startActivity(context,intent);
     }
+
+
     public static void gotoCategoryChildActivity(Context context, int catId, String groupName, ArrayList<CategoryChildBean> list){
         Intent intent = new Intent();
         intent.setClass(context, CategoryChildActivity.class);
         intent.putExtra(I.CategoryChild.CAT_ID,catId);
         intent.putExtra(I.CategoryGroup.NAME,groupName);
-        intent.putExtra(I.CategoryChild.ID, list);
+        intent.putExtra(I.CategoryChild.ID,list);
         startActivity(context,intent);
     }
 
     public static void gotoLogin(Activity context){
-        startActivity(context, LoginActivity.class);
+        Intent intent = new Intent();
+        intent.setClass(context,LoginActivity.class);
+        startActivityForResult(context,intent,I.REQUEST_CODE_LOGIN);
     }
 
     public static void gotoRegister(Activity context){
