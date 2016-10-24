@@ -7,10 +7,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.winston.myapplication.FuLiCenterApplication;
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.Result;
 import com.example.winston.myapplication.bean.User;
+import com.example.winston.myapplication.dao.SharePrefrenceUtils;
+import com.example.winston.myapplication.dao.UserDao;
 import com.example.winston.myapplication.net.NetDao;
 import com.example.winston.myapplication.net.OkHttpUtils;
 import com.example.winston.myapplication.utils.CommonUtils;
@@ -100,9 +103,17 @@ public class LoginActivity extends BaseActivity {
                     CommonUtils.showLongToast(R.string.login_fail);
                 }else{
                     if(result.isRetMsg()){
-                        I.User user = (I.User) result.getRetData();
+                        User user = (User) result.getRetData();
+                        UserDao dao = new UserDao(mContext);
+                        boolean isSuccess = dao.saveUser((User) user);
+                        if (isSuccess) {
+                            SharePrefrenceUtils.getInstence(mContext).saveUser(user.getMuserName());
+                            FuLiCenterApplication.setUser(user);
+                            MFGT.finish(mContext);
+                        } else {
+                            CommonUtils.showLongToast(R.string.user_database_error);
+                        }
                         L.e(TAG,"user="+user);
-                        MFGT.finish(mContext);
                     }else{
                         if(result.getRetCode()==I.MSG_LOGIN_UNKNOW_USER){
                             CommonUtils.showLongToast(R.string.login_fail_unknow_user);
