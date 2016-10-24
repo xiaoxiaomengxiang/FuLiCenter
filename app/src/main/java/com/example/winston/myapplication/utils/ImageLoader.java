@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
+import com.example.winston.myapplication.bean.User;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -199,7 +200,7 @@ public class ImageLoader {
         final Bitmap bitmap = BitmapUtils.getBitmap(dir);
         if (bitmap != null) {
             return bitmap;
-         }
+        }
         if (!mIsDragging) {//若列表在滑动中，则不加载图片
             return null;
         }
@@ -357,6 +358,26 @@ public class ImageLoader {
                 .defaultPicture(R.drawable.nopic)
                 .imageView(imageView)
                 .setDragging(isDragging)
+                .showImage(context);
+    }
+    //http://101.251.196.90:8000/FuLiCenterServerV2.0/downloadAvatar?
+    // name_or_hxid=a952700&avatarType=user_avatar&m_avatar_suffix=.jpg&width=200&height=200
+    //http://101.251.196.90:8000/FuLiCenterServerV2.0/downloadAvatar?
+    // name_or_hxid=a952700&avatarType=0&m_avatar_suffix=.jpg&width=200&height=200
+    public static String getAvatarUrl(User user){
+        if(user!=null) {
+            String url = I.DOWNLOAD_AVATAR_URL + I.NAME_OR_HXID + "=" + user.getMuserName()
+                    + I.AND + I.AVATAR_TYPE + "=" + user.getMavatarPath() + I.AND + I.AVATAR_SUFFIX
+                    + "=" + user.getMavatarSuffix() + I.AND + "width=200&height=200";
+            L.e("useravatar=" + url);
+            return url;
+        }
+        return null;
+    }
+    public static void setAvatar(String url,Context context,ImageView imageView){
+        ImageLoader.build(url)
+                .defaultPicture(R.drawable.contactlogo)
+                .imageView(imageView)
                 .showImage(context);
     }
 }
