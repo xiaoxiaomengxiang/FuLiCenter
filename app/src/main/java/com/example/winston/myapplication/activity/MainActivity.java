@@ -1,5 +1,6 @@
 package com.example.winston.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +9,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.winston.myapplication.FuLiCenterApplication;
+import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.fragment.BoutiqueFragment;
 import com.example.winston.myapplication.fragment.CategoryFragment;
@@ -142,5 +144,23 @@ public class MainActivity extends BaseActivity {
     }
     public void onBackPressed(){
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        L.e("MainActivity","onResume");
+        if (index == 4 && FuLiCenterApplication.getUser() == null) {
+            index=4;
+        }
+        setFragment();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == I.REQUEST_CODE_LOGIN && FuLiCenterApplication.getUser() != null) {
+            index=4;
+        }
     }
 }
