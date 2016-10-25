@@ -12,6 +12,8 @@ import com.example.winston.myapplication.activity.GoodsDetailActivity;
 import com.example.winston.myapplication.activity.LoginActivity;
 import com.example.winston.myapplication.activity.MainActivity;
 import com.example.winston.myapplication.activity.RegisterActivity;
+import com.example.winston.myapplication.activity.UpdateNickActivity;
+import com.example.winston.myapplication.activity.UserProfileActivity;
 import com.example.winston.myapplication.bean.BoutiqueBean;
 import com.example.winston.myapplication.bean.CategoryChildBean;
 
@@ -79,5 +81,11 @@ public class MFGT {
         context.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
     }
 
+    public static void gotoSettings(Activity context) {
+        startActivity(context, UserProfileActivity.class);
+    }
+    public static void gotoUpdateNick(Activity context){
+        startActivityForResult(context,new Intent(context, UpdateNickActivity.class),I.REQUEST_CODE_NICK);
+           }
 }
 

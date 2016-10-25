@@ -20,6 +20,7 @@ import com.example.winston.myapplication.utils.CommonUtils;
 import com.example.winston.myapplication.utils.L;
 import com.example.winston.myapplication.utils.MFGT;
 import com.example.winston.myapplication.utils.ResultUtils;
+import com.example.winston.myapplication.view.DisplayUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +48,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        DisplayUtils.initBackWithTitle(mContext,getResources().getString(R.string.login));
     }
 
     @Override

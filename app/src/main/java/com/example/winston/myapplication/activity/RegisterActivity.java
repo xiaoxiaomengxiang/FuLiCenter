@@ -1,11 +1,13 @@
 package com.example.winston.myapplication.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.Result;
 import com.example.winston.myapplication.net.NetDao;
@@ -59,7 +61,6 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-
     }
 
     @OnClick(R.id.btn_register)
@@ -109,6 +110,7 @@ public class RegisterActivity extends BaseActivity {
                 }else{
                     if(result.isRetMsg()){
                         CommonUtils.showLongToast(R.string.register_success);
+                        setResult(RESULT_OK,new Intent().putExtra(I.User.USER_NAME,username));
                         MFGT.finish(mContext);
                     }else{
                         CommonUtils.showLongToast(R.string.register_fail_exists);
@@ -116,7 +118,6 @@ public class RegisterActivity extends BaseActivity {
                     }
                 }
             }
-
             @Override
             public void onError(String error) {
                 pd.dismiss();

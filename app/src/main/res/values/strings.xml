@@ -27,5 +27,20 @@
     <string name="login_fail_error_password">login fail,error password</string>
     <string name="title_activity_register_activity">RegisterActivity</string>
     <string name="user_database_error">user database error</string>
+    <string name="title_activity_user_profile">UserProfileActivity</string>
+    <string name="user_profile_avatar">用户头像</string>
+    <string name="user_profile_name">用户名</string>
+    <string name="user_profile_Uname">昵称</string>
+    <string name="logout">退出</string>
+    <string name="user_profile" />
+    <string name="username_connot_be_modify" />
+    <string name="update_user_nick">update user nick</string>
+    <string name="update_fail">update fail</string>
+    <string name="update_nick_fail_unmodify">user nick unmodify</string>
+    +    <string name="update_user_nick_success">update user nick success</string>
+    <string name="save" />
+    <string name="update_user_avatar">用户头像</string>
+    <string name="update_user_avatar_fail">用户头像更新失败</string>
+    <string name="update_user_avatar_success">用户头像更新成功</string>
 </resources>
 

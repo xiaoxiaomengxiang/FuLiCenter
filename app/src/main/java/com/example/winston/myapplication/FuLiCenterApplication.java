@@ -2,6 +2,8 @@ package com.example.winston.myapplication;
 
 import android.app.Application;
 
+import com.example.winston.myapplication.bean.User;
+
 /**
  * Created by Winston on 2016/10/17.
  */
@@ -11,6 +13,7 @@ public class FuLiCenterApplication extends Application {
     private static FuLiCenterApplication instance;
 
     private static String username;
+    private static User user;
 
     @Override
     public void onCreate() {
@@ -31,6 +34,15 @@ public class FuLiCenterApplication extends Application {
     }
 
     public static void setUsername(String username) {
+
         FuLiCenterApplication.username = username;
+    }
+
+    public static User getUser() {
+        return user;
+    }
+
+    public static void setUser(User user) {
+        FuLiCenterApplication.user = user;
     }
 }

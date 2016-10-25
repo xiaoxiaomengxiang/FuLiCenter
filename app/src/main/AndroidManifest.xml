@@ -22,8 +22,16 @@
         <activity android:name=".activity.GoodsDetailActivity" />
         <activity android:name=".activity.BoutiqueChildActivity" />
         <activity android:name=".activity.CategoryChildActivity" />
+        <activity android:name=".activity.LoginActivity" />
         <activity
-            android:name=".activity.LoginActivity"></activity>
+            android:name=".activity.RegisterActivity"
+            android:label="@string/title_activity_register_activity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.UserProfileActivity"
+            android:label="@string/title_activity_user_profile"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.UpdateNickActivity"></activity>
     </application>
 
 </manifest>
