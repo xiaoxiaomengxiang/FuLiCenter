@@ -115,6 +115,10 @@ public class CollectsAdapter extends RecyclerView.Adapter {
         mList.addAll(list);
         notifyDataSetChanged();
     }
+    public void remove(CollectBean bean) {
+                mList.remove(bean);
+                notifyDataSetChanged();
+            }
 
     class ColelctsViewHolder extends ViewHolder {
         @BindView(R.id.ivGoodsThumb)
@@ -133,8 +137,6 @@ public class CollectsAdapter extends RecyclerView.Adapter {
 
         @OnClick(R.id.layout_goods)
         public void onGoodsItemClick() {
-            int goodsId = (int) mLayoutGoods.getTag();
-            MFGT.gotoGoodsDetailsActivity(mContext, goodsId);
             CollectBean goods = (CollectBean) mLayoutGoods.getTag();
             MFGT.gotoGoodsDetailsActivity(mContext, goods.getGoodsId());
         }
