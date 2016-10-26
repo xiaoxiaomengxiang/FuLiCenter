@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.winston.myapplication.FuLiCenterApplication;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.activity.MainActivity;
+import com.example.winston.myapplication.bean.MessageBean;
 import com.example.winston.myapplication.bean.Result;
 import com.example.winston.myapplication.bean.User;
 import com.example.winston.myapplication.dao.UserDao;
@@ -42,8 +43,11 @@ public class PersonalCenterFragment extends BaseFragment {
     TextView mTvUserName;
 
     MainActivity mContext;
+    @BindView(R.id.center_user_order_lis)
     GridView mCenterUserOrderLis;
     User user = null;
+    @BindView(R.id.tv_collect_count)
+    TextView mTvCollectCount;
 
     @Nullable
     @Override
@@ -62,12 +66,12 @@ public class PersonalCenterFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-         user = FuLiCenterApplication.getUser();
-        L.e(TAG,"user="+user);
-        if(user==null){
+        user = FuLiCenterApplication.getUser();
+        L.e(TAG, "user=" + user);
+        if (user == null) {
             MFGT.gotoLogin(mContext);
-        }else{
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),mContext,mIvUserAvatar);
+        } else {
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, mIvUserAvatar);
             mTvUserName.setText(user.getMuserNick());
         }
     }
@@ -81,16 +85,23 @@ public class PersonalCenterFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         user = FuLiCenterApplication.getUser();
-        if(user!=null){
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),mContext,mIvUserAvatar);
+        L.e(TAG, "user=" + user);
+        if (user != null) {
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, mIvUserAvatar);
             mTvUserName.setText(user.getMuserNick());
             syncUserInfo();
+            syncCollectsCount();
         }
     }
 
-    @OnClick({R.id.tv_center_settings,R.id.center_user_info})
+    @OnClick({R.id.tv_center_settings, R.id.center_user_info})
     public void gotoSettings() {
         MFGT.gotoSettings(mContext);
+    }
+
+    @OnClick(R.id.layout_center_collect)
+    public void gotoCollectsList(){
+        MFGT.gotoCollects(mContext);
     }
 
     private void initOrderList() {
@@ -115,17 +126,17 @@ public class PersonalCenterFragment extends BaseFragment {
         mCenterUserOrderLis.setAdapter(adapter);
     }
 
-    private void syncUserInfo(){
+    private void syncUserInfo() {
         NetDao.syncUserInfo(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
                 Result result = ResultUtils.getResultFromJson(s, User.class);
-                if(result!=null){
+                if (result != null) {
                     User u = (User) result.getRetData();
-                    if(!user.equals(u)){
+                    if (!user.equals(u)) {
                         UserDao dao = new UserDao(mContext);
                         boolean b = dao.saveUser(u);
-                        if(b){
+                        if (b) {
                             FuLiCenterApplication.setUser(u);
                             user = u;
                             ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, mIvUserAvatar);
@@ -138,6 +149,25 @@ public class PersonalCenterFragment extends BaseFragment {
             @Override
             public void onError(String error) {
 
+            }
+        });
+    }
+
+    private void syncCollectsCount() {
+        NetDao.getCollectsCount(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result != null && result.isSuccess()) {
+                    mTvCollectCount.setText(result.getMsg());
+                } else {
+                    mTvCollectCount.setText(String.valueOf(0));
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                mTvCollectCount.setText(String.valueOf(0));
+                L.e(TAG, "error=" + error);
             }
         });
     }
