@@ -5,16 +5,26 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.example.winston.myapplication.FuLiCenterApplication;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.activity.MainActivity;
+import com.example.winston.myapplication.bean.Result;
 import com.example.winston.myapplication.bean.User;
+import com.example.winston.myapplication.dao.UserDao;
+import com.example.winston.myapplication.net.NetDao;
+import com.example.winston.myapplication.net.OkHttpUtils;
 import com.example.winston.myapplication.utils.ImageLoader;
 import com.example.winston.myapplication.utils.L;
 import com.example.winston.myapplication.utils.MFGT;
+import com.example.winston.myapplication.utils.ResultUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +42,8 @@ public class PersonalCenterFragment extends BaseFragment {
     TextView mTvUserName;
 
     MainActivity mContext;
-    User user=null;
+    GridView mCenterUserOrderLis;
+    User user = null;
 
     @Nullable
     @Override
@@ -46,7 +57,7 @@ public class PersonalCenterFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-
+        initOrderList();
     }
 
     @Override
@@ -73,11 +84,61 @@ public class PersonalCenterFragment extends BaseFragment {
         if(user!=null){
             ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),mContext,mIvUserAvatar);
             mTvUserName.setText(user.getMuserNick());
+            syncUserInfo();
         }
     }
 
     @OnClick({R.id.tv_center_settings,R.id.center_user_info})
     public void gotoSettings() {
         MFGT.gotoSettings(mContext);
+    }
+
+    private void initOrderList() {
+        ArrayList<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+        HashMap<String, Object> order1 = new HashMap<String, Object>();
+        order1.put("order", R.drawable.order_list1);
+        data.add(order1);
+        HashMap<String, Object> order2 = new HashMap<String, Object>();
+        order2.put("order", R.drawable.order_list2);
+        data.add(order2);
+        HashMap<String, Object> order3 = new HashMap<String, Object>();
+        order3.put("order", R.drawable.order_list3);
+        data.add(order3);
+        HashMap<String, Object> order4 = new HashMap<String, Object>();
+        order4.put("order", R.drawable.order_list4);
+        data.add(order4);
+        HashMap<String, Object> order5 = new HashMap<String, Object>();
+        order5.put("order", R.drawable.order_list5);
+        data.add(order5);
+        SimpleAdapter adapter = new SimpleAdapter(mContext, data, R.layout.simple_adapter,
+                new String[]{"order"}, new int[]{R.id.iv_order});
+        mCenterUserOrderLis.setAdapter(adapter);
+    }
+
+    private void syncUserInfo(){
+        NetDao.syncUserInfo(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Result result = ResultUtils.getResultFromJson(s, User.class);
+                if(result!=null){
+                    User u = (User) result.getRetData();
+                    if(!user.equals(u)){
+                        UserDao dao = new UserDao(mContext);
+                        boolean b = dao.saveUser(u);
+                        if(b){
+                            FuLiCenterApplication.setUser(u);
+                            user = u;
+                            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, mIvUserAvatar);
+                            mTvUserName.setText(user.getMuserNick());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 }
