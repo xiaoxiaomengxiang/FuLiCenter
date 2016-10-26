@@ -2,13 +2,17 @@ package com.example.winston.myapplication.activity;
 
 import android.os.Bundle;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.winston.myapplication.FuLiCenterApplication;
 import com.example.winston.myapplication.I;
 import com.example.winston.myapplication.R;
 import com.example.winston.myapplication.bean.AlbumsBean;
 import com.example.winston.myapplication.bean.GoodsDetailsBean;
+import com.example.winston.myapplication.bean.MessageBean;
+import com.example.winston.myapplication.bean.User;
 import com.example.winston.myapplication.net.NetDao;
 import com.example.winston.myapplication.net.OkHttpUtils;
 import com.example.winston.myapplication.utils.CommonUtils;
@@ -46,6 +50,9 @@ public class GoodsDetailActivity extends BaseActivity {
 
     int goodsId;
     GoodsDetailActivity mContext;
+    boolean isCollected = false;
+    @BindView(R.id.iv_good_collect)
+    ImageView mIvGoodCollect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,7 @@ public class GoodsDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         goodsId = getIntent().getIntExtra(I.GoodsDetails.KEY_GOODS_ID, 0);
         L.e("details", "goodsid=" + goodsId);
-        if(goodsId==0){
+        if (goodsId == 0) {
             finish();
         }
         mContext = this;
@@ -66,14 +73,14 @@ public class GoodsDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected  void initData() {
+    protected void initData() {
         NetDao.downloadGoodsDetail(mContext, goodsId, new OkHttpUtils.OnCompleteListener<GoodsDetailsBean>() {
             @Override
             public void onSuccess(GoodsDetailsBean result) {
-                L.i("details="+result);
-                if(result!=null){
+                L.i("details=" + result);
+                if (result != null) {
                     showGoodDetails(result);
-                }else{
+                } else {
                     finish();
                 }
             }
@@ -81,7 +88,7 @@ public class GoodsDetailActivity extends BaseActivity {
             @Override
             public void onError(String error) {
                 finish();
-                L.e("details,error="+error);
+                L.e("details,error=" + error);
                 CommonUtils.showShortToast(error);
             }
         });
@@ -92,12 +99,12 @@ public class GoodsDetailActivity extends BaseActivity {
         mTvGoodName.setText(details.getGoodsName());
         mTvGoodPriceCurrent.setText(details.getCurrencyPrice());
         mTvGoodPriceShop.setText(details.getShopPrice());
-        mSalv.startPlayLoop(mIndicator,getAlbumImgUrl(details),getAlbumImgCount(details));
-        mWvGoodBrief.loadDataWithBaseURL(null,details.getGoodsBrief(),I.TEXT_HTML,I.UTF_8,null);
+        mSalv.startPlayLoop(mIndicator, getAlbumImgUrl(details), getAlbumImgCount(details));
+        mWvGoodBrief.loadDataWithBaseURL(null, details.getGoodsBrief(), I.TEXT_HTML, I.UTF_8, null);
     }
 
     private int getAlbumImgCount(GoodsDetailsBean details) {
-        if(details.getProperties()!=null && details.getProperties().length>0) {
+        if (details.getProperties() != null && details.getProperties().length > 0) {
             return details.getProperties()[0].getAlbums().length;
         }
         return 0;
@@ -105,10 +112,10 @@ public class GoodsDetailActivity extends BaseActivity {
 
     private String[] getAlbumImgUrl(GoodsDetailsBean details) {
         String[] urls = new String[]{};
-        if(details.getProperties()!=null && details.getProperties().length>0){
+        if (details.getProperties() != null && details.getProperties().length > 0) {
             AlbumsBean[] albums = details.getProperties()[0].getAlbums();
             urls = new String[albums.length];
-            for(int i=0;i<albums.length;i++){
+            for (int i = 0; i < albums.length; i++) {
                 urls[i] = albums[i].getImgUrl();
             }
         }
@@ -116,13 +123,52 @@ public class GoodsDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected  void initView() {
+    protected void initView() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isCollected();
     }
 
     @OnClick(R.id.backClickArea)
-    public void onBackClick(){
+    public void onBackClick() {
         MFGT.finish(this);
     }
+
+    private void isCollected() {
+        User user = FuLiCenterApplication.getUser();
+        if (user != null) {
+            NetDao.isColected(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        isCollected = true;
+                    }else{
+                        isCollected = false;
+                    }
+                    updateGoodsCollectStatus();
+                }
+
+                @Override
+                public void onError(String error) {
+                    isCollected = false;
+                    updateGoodsCollectStatus();
+                }
+            });
+        }
+        updateGoodsCollectStatus();
+    }
+
+    private void updateGoodsCollectStatus() {
+        if (isCollected) {
+            mIvGoodCollect.setImageResource(R.mipmap.bg_collect_out);
+        } else {
+            mIvGoodCollect.setImageResource(R.mipmap.bg_collect_in);
+        }
+    }
+
 
 }
