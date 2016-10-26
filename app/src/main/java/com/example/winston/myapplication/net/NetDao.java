@@ -7,6 +7,7 @@ import com.example.winston.myapplication.bean.BoutiqueBean;
 import com.example.winston.myapplication.bean.CategoryChildBean;
 import com.example.winston.myapplication.bean.CategoryGroupBean;
 import com.example.winston.myapplication.bean.GoodsDetailsBean;
+import com.example.winston.myapplication.bean.MessageBean;
 import com.example.winston.myapplication.bean.NewGoodsBean;
 import com.example.winston.myapplication.bean.Result;
 import com.example.winston.myapplication.utils.MD5;
@@ -99,6 +100,21 @@ public class NetDao {
                                 .addFile2(file)
                                 .targetClass(String.class)
                                 .post()
+                                .execute(listener);
+            }
+    public static void syncUserInfo(Context context, String username, OkHttpUtils.OnCompleteListener<String> listener){
+                OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+                utils.setRequestUrl(I.REQUEST_FIND_USER)
+                                .addParam(I.User.USER_NAME,username)
+                                .targetClass(String.class)
+                                .execute(listener);
+            }
+    //收藏商品的数量
+    public static void getCollectsCount(Context context, String username, OkHttpUtils.OnCompleteListener<MessageBean> listener){
+                OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+                utils.setRequestUrl(I.REQUEST_FIND_COLLECT_COUNT)
+                                .addParam(I.Collect.USER_NAME,username)
+                                .targetClass(MessageBean.class)
                                 .execute(listener);
             }
 }
