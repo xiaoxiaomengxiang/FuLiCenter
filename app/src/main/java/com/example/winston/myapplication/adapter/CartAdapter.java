@@ -60,7 +60,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         mList.addAll(list);
         notifyDataSetChanged();
     }
-
     class CartViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.cb_cart_selected)
         CheckBox mCbCartSelected;
